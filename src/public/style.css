@@ -1,0 +1,68 @@
+.secure {
+    float: right;
+}
+
+.secure>a {
+    text-decoration: none;
+}
+
+ul li {
+    text-align: left;
+}
+
+/* Add some styles for the sidebar */
+.sidebar {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: block;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+}
+
+/* CSS cho màn hình điện thoại */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        display: none;
+        /* Hiển thị sidebar trên màn hình điện thoại */
+    }
+
+    .category-button {
+        display: none;
+        /* Ẩn nút "Category" trên màn hình điện thoại */
+    }
+}
+
+#demo {
+    background-color: black;
+    text-align: center;
+}
+
+.carousel-inner {
+    margin: 0 auto;
+    /* Để canh giữa carousel */
+    width: 75%;
+    /* Kích thước của carousel */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    color: white;
+    /* Màu chữ cho nút previous và next */
+}
+
+.carousel-indicators button {
+    background-color: black;
+    /* Màu nền cho các indicators */
+}

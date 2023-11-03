@@ -9,7 +9,7 @@
         <%= title %>
     </title>
     <style>
-        .secure {
+        .secure{
             float: right;
         }
 
@@ -26,6 +26,7 @@
             background-color: #f4f4f4;
             padding: 10px;
             border: 1px solid #ddd;
+            display: block;
         }
 
         .sidebar ul {
@@ -37,8 +38,44 @@
             margin-bottom: 10px;
         }
 
-        ul li a{
+        ul li a {
             text-decoration: none;
+        }
+
+        /* CSS cho màn hình điện thoại */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                display: none;
+                /* Hiển thị sidebar trên màn hình điện thoại */
+            }
+
+            .category-button {
+                display: none;
+                /* Ẩn nút "Category" trên màn hình điện thoại */
+            }
+        }
+
+        #demo {
+            background-color: black;
+            text-align: center;
+        }
+
+        .carousel-inner {
+            margin: 0 auto;
+            /* Để canh giữa carousel */
+            width: 75%;
+            /* Kích thước của carousel */
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            color: white;
+            /* Màu chữ cho nút previous và next */
+        }
+
+        .carousel-indicators button {
+            background-color: black;
+            /* Màu nền cho các indicators */
         }
     </style>
 </head>
@@ -47,40 +84,65 @@
     <header>
         <div class="bg-dark text-white container">
             <div class="row py-4">
-                <div class="col-md-8">
+                <div class="col-md-8 col-sm-8">
                     <div class="logo">
                         <a href="/user">
                             <img src="./upload/logo-hang-gia-dung.jpg" width="100px" alt="">
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="dropdown secure">
-                        <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
-                            User Account
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">đăng ký</a></li>
-                            <li><a class="dropdown-item" href="#">đăng nhập</a></li>
-                            <li><a class="dropdown-item" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-handbag-fill" viewBox="0 0 16 16">
-                                <path d="M8 1a2 2 0 0 0-2 2v2H5V3a3 3 0 1 1 6 0v2h-1V3a2 2 0 0 0-2-2zM5 5H3.36a1.5 1.5 0 0 0-1.483 1.277L.85 13.13A2.5 2.5 0 0 0 3.322 16h9.355a2.5 2.5 0 0 0 2.473-2.87l-1.028-6.853A1.5 1.5 0 0 0 12.64 5H11v1.5a.5.5 0 0 1-1 0V5H6v1.5a.5.5 0 0 1-1 0V5z"/>
-                            </svg></a></li>
-                        </ul>
-                    </div>
+                <div class="col-md-4 col-sm-4">
+                    <nav class="navbar navbar-expand-lg bg-dark secure">
+                        <div class="container-fluid">
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation" class="bg-white">
+                                <span class="navbar-toggler-icon bg-white"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            User Account
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/user/signup" class="text-white">đăng ký</a></li>
+                                            <li><a class="dropdown-item" href="/user/loggin" class="text-white">đăng nhập</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Category
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="">danh sách sản phẩm</a></li>
+                                            <li><a class="dropdown-item" href="">danh sách người dùng</a></li>
+                                            <li><a class="dropdown-item" href="">chat</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </div>
     </header>
-    <div class="container">
+    <div class="container" style="padding: 0px;">
         <!-- Add the sidebar with categories -->
         <div class="row">
-            <div class="col-md-2" style="padding-left: 0px;">
+            <div class="col-md-2">
                 <div class="sidebar">
-                    <h3>Management</h3>
+                    <h3>danh mục</h3>
                     <ul>
                         <li><a href="#">danh sách sản phẩm</a></li>
                         <li><a href="#">danh sách người dùng</a></li>
-                        <li><a href="#">chat</a></li>
+                        <li><a href="#">chat</a></li>                        
                     </ul>
                 </div>
             </div>

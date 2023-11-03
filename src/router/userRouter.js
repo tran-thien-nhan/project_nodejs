@@ -1,13 +1,17 @@
 const express = require('express');
-const { viewUserIndex } = require('../controllers/userController');
+const { viewUserIndex, signupForm, logginForm } = require('../controllers/userController');
 
 const upload = require('../controllers/middleware/uploadFile');
 const userRouter = express.Router();
+
+// Thiết lập layout cho tất cả các route trong userRouter
+userRouter.use((req, res, next) => {
+  res.locals.layout = 'userLayout'; // Thay 'your-layout-file' bằng tên tệp layout của bạn
+  next();
+});
+
 userRouter.get('/', viewUserIndex);
-// productRouter.get('/create', getFormCreate);
-// productRouter.post('/create', upload.single('image'), createProduct);
-// productRouter.get('/delete/:id', deleteProduct);
-// productRouter.get('/edit/:id', getFormEdit);
-// productRouter.post('/edit/:id', upload.single('image'), editProduct);
+userRouter.get('/signup', signupForm);
+userRouter.get('/loggin', logginForm);
 
 module.exports = userRouter;

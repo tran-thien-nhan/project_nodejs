@@ -15,8 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("src/public")); //để đọc đường dẫn hình ảnh
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-// app.set('layout', 'layouts/userLayout');
-//app.set('layout', 'layouts/adminLayout');
+app.set('layout', 'layouts/layout');
 
 //cai dat session
 app.use(session({
