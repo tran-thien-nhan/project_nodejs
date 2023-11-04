@@ -1,5 +1,5 @@
 const express = require('express');
-const { viewAdminIndex } = require('../controllers/adminController');
+const { viewAdminIndex, getAllUsers, getFormUpdateRoleUser, updateRoleUser } = require('../controllers/adminController');
 
 const upload = require('../controllers/middleware/uploadFile');
 const adminRouter = express.Router();
@@ -13,6 +13,9 @@ adminRouter.use((req, res, next) => {
 });
 
 adminRouter.get('/', viewAdminIndex);
+adminRouter.get('/ulist', getAllUsers);
+adminRouter.get('/updaterole/:id', getFormUpdateRoleUser);
+adminRouter.post('/updaterole/:id', updateRoleUser);
 // productRouter.get('/create', getFormCreate);
 // productRouter.post('/create', upload.single('image'), createProduct);
 // productRouter.get('/delete/:id', deleteProduct);

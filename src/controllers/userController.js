@@ -30,7 +30,6 @@ const checkLogin = async (req, res, next) => {
     }
 };
 
-
 const signup = async (req, res) => {
     const data = req.body;
     await User.create(data)
