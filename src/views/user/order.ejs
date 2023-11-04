@@ -1,0 +1,52 @@
+<div class="mt-2">
+    <% if (message) { %>
+        <div class="alert alert-success alert-dismissable">
+            <strong>success!</strong>
+            <%= message %>
+        </div>
+    <% } %>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Number</th>
+                <th>Pay</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let totalPay = 0; %>
+            <% orders.forEach(item => { %>
+                <tr>
+                    <td>
+                        <img src="<%= item.image %>" alt="image" width="50px" class="img-thumbnail">
+                    </td>
+                    <td>
+                        <%= item.title %>
+                    </td>
+                    <td>
+                        <%= item.price %>$
+                    </td>
+                    <td>
+                        <%= item.number %>
+                    </td>
+                    <td>
+                        <%= item.number * item.price %>$
+                    </td>
+                    <td>
+                        <a href="/user/delete/<%= item._id %>" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <% totalPay += item.number * item.price; %>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <div class="total-pay-container">
+        <h5 class="total-pay" style="font-weight: bold;">Total Pay: <%= totalPay %>$</h5>
+    </div>
+    <button class="btn btn-warning">Buy !</button>
+</div>

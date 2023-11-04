@@ -1,6 +1,7 @@
 const fs = require('fs');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 
 const viewUserIndex = (req, res) => {
     res.render('user/index', { title: 'Trang người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
@@ -115,7 +116,7 @@ const getProductDetail = async (req, res) => {
         res.render('user/productDetail', {
             title: title, // Sử dụng tiêu đề sản phẩm làm tiêu đề của trang
             layout: 'layouts/userLayout',
-            product: product, 
+            product: product,
             errors: null,
             user: req.session.user
         });
@@ -131,11 +132,60 @@ const getProductDetail = async (req, res) => {
     }
 }
 
+const viewOrder = async (req, res) => {
+    const orders = await Order.find({});
+    res.render('user/order', { title: 'Trang giỏ hàng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, orders });
+}
+
+const createOrder = async (req, res) => {
+    const { title, price, number, image } = req.body;
+    const dataSubmit = {
+        title: title,
+        price: price,
+        number: number,
+        image: image
+    }
+
+    try {
+        const order = await Order.create(dataSubmit);
+        req.session.message = "add to cart successfully";
+
+        const orders = await Order.find({});
+        res.render('user/order', { title: 'Trang giỏ hàng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, orders });
+    } catch (err) {
+        let errors = {};
+        if (err.name === 'ValidationError') {
+            for (const field in err.errors) {
+                errors[field] = err.errors[field].message;
+            }
+            res.render('user/productDetail', { errors, data: dataSubmit });
+        }
+    }
+}
+
+const deleteOrder = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const order = await Order.findByIdAndDelete(id);
+        if (!order) {
+            return res.status(404).send('Order not found');
+        }
+
+        req.session.message = 'Order deleted successfully';
+        res.redirect('/user/order');
+    } catch (err) {
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+
 const logout = (req, res) => {
     req.session.destroy();
     res.redirect('/user/login');
 }
 
 module.exports = {
-    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail
+    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail, createOrder, viewOrder, deleteOrder
 }

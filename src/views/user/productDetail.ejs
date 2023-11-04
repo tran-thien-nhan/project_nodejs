@@ -89,42 +89,54 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <div class="product-card">
-                <img src="<%= product.image %>" class="product-image" alt="Image of <%= product.title %>">
-                <!-- Hiệu ứng mờ và nút "Xem hình" -->
-                <div class="product-image-overlay">
-                    <div class="view-image-button" data-bs-toggle="modal" data-bs-target="#imageModal">
-                        Xem hình
+        <% if (message) { %>
+            <div class="alert alert-success alert-dismissable">
+                <strong>Success!</strong>
+                <%= message %>
+            </div>
+            <% }%>
+                <div class="col-md-12">
+                    <div class="product-card">
+                        <img src="<%= product.image %>" class="product-image" alt="Image of <%= product.title %>">
+                        <!-- Hiệu ứng mờ và nút "Xem hình" -->
+                        <div class="product-image-overlay">
+                            <div class="view-image-button" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                Xem hình
+                            </div>
+                        </div>
+                        <div class="product-details">
+                            <h5 class="product-title">
+                                <%= product.title %>
+                            </h5>
+                            <p class="product-price"><strong>Giá gốc:</strong>
+                                <%= (product.price * 1.1).toFixed(0) %> $
+                            </p>
+                            <p>giảm giá: <span style="color: red; font-weight: bold;">10%</span></p>
+                            <h5><strong>thành tiền <span style="color: red; font-weight: bold; font-size: larger;">
+                                        <%= product.price %> $
+                                    </span></strong></h5>
+                            <form action="/user/order" method="post">
+                                <div class="product-quantity mb-2">
+                                    <span class="quantity-label">Số lượng:</span>
+                                    <input type="number" class="quantity-input" name="number" value="1" min="1">
+                                </div>
+                                <input type="hidden" name="title" value="<%= product.title %>">
+                                <input type="hidden" name="price" value="<%= product.price %>">
+                                <input type="hidden" name="image" value="<%= product.image %>">
+                                <button type="submit" class="buy-button" data-product-id="<%= product._id %>">Mua
+                                    ngay</button>
+                            </form>
+
+                            <a href="" class="buy-button mt-2" style="background-color: rgb(69, 169, 69);">thêm vào giỏ
+                                hàng</a>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <p class="product-description">
+                            <%= product.des %>
+                        </p>
                     </div>
                 </div>
-                <div class="product-details">
-                    <h5 class="product-title">
-                        <%= product.title %>
-                    </h5>
-                    <p class="product-price"><strong>Giá gốc:</strong>
-                        <%= (product.price * 1.1).toFixed(0) %> $
-                    </p>
-                    <p>giảm giá: <span style="color: red; font-weight: bold;">10%</span></p>
-                    <h5><strong>thành tiền <span style="color: red; font-weight: bold; font-size: larger;">
-                                <%= product.price %> $
-                            </span></strong></h5>
-                    <form action="/user/checkout" method="post">
-                        <div class="product-quantity mb-2">
-                            <span class="quantity-label">Số lượng:</span>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                        </div>
-                        <button type="submit" class="buy-button">mua ngay</button>
-                    </form>
-                    <a href="" class="buy-button mt-2" style="background-color: rgb(69, 169, 69);">thêm vào giỏ hàng</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <p class="product-description">
-                    <%= product.des %>
-                </p>
-            </div>
-        </div>
     </div>
 </div>
 
