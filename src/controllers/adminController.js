@@ -1,9 +1,15 @@
 const fs = require('fs');
-const Admin = require('../models/Admin');
+// const Admin = require('../models/Admin');
+const Product = require('../models/Product');
 const User = require('../models/User');
 
 const viewAdminIndex = (req, res) => {
     res.render('admin/index', { title: 'Trang quản trị', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user });
+}
+
+const getAllProduct = async (req, res) => {
+    const products = await Product.find({});
+    res.render('admin/listProduct', { title: 'Trang danh sách sản phẩm', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user, products });
 }
 
 const signupForm = (req, res) => {
@@ -69,6 +75,37 @@ const updateRoleUser = async (req, res) => {
     }
 }
 
+const getFormCreateProduct = (req, res) => {
+    res.render('admin/create', { title: 'Trang thêm sản phẩm', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user });
+}
+
+const createProduct = async (req, res) => {
+    let { title, price, quantity, des, category } = req.body;
+    let imageUrl = req.file ? `/upload/${req.file.filename}` : '';
+    const dataSubmit = {
+        title: title,
+        price: price,
+        quantity: quantity,
+        des: des,
+        category: category,
+        image: imageUrl
+    }
+    await Product.create(dataSubmit)
+        .then(result => {
+            req.session.message = "Product create successfully";
+            res.redirect('/admin/plist');
+        })
+        .catch(err => {
+            let errors = {};
+            if (err.title === 'ValidationError') {
+                for (const field in err.errors) {
+                    errors[field] = err.errors[field].message;
+                }
+                res.render('/admin/create', { errors, data: dataSubmit });
+            }
+        })
+}
+
 module.exports = {
-    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser
+    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser, getFormCreateProduct, createProduct, getAllProduct
 }

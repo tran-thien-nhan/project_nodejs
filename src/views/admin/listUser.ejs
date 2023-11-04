@@ -1,55 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-</head>
-
-<body>
-    <div class="mt-5">
-        <% if (message) { %>
-            <div class="alert alert-success alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Success!</strong>
-                <%= message %>
-            </div>
-            <% } %>
-                <table class="table table-hover">
-                    <thead>
+<div class="mt-2">
+    <% if (message) { %>
+        <div class="alert alert-success alert-dismissable">
+            <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
+            <strong>Success!</strong>
+            <%= message %>
+        </div>
+        <% } %>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(item=> { %>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Address</th>
-                            <th>Role</th>
-                            <th>action</th>
+                            <td>
+                                <%= item.name %>
+                            </td>
+                            <td>
+                                <%= item.email %>
+                            </td>
+                            <td>
+                                <%= item.role %>
+                            </td>
+                            <td>
+                                <a href="/admin/updaterole/<%= item._id%>" class="btn btn-success">update</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <% users.forEach(item=> { %>
-                            <tr>
-                                <td>
-                                    <%= item.name %>
-                                </td>
-                                <td>
-                                    <%= item.email %>
-                                </td>
-                                <td>
-                                    <%= item.address %>
-                                </td>
-                                <td>
-                                    <%= item.role %>
-                                </td>
-                                <td>
-                                    <a href="/admin/updaterole/<%= item._id%>" class="btn btn-success">update</a>
-                                </td>
-                            </tr>
-                            <% }); %>
-                    </tbody>
-                </table>
-    </div>
-</body>
-
-</html>
+                        <% }); %>
+                </tbody>
+            </table>
+</div>

@@ -1,0 +1,49 @@
+<div class="mt-2">
+    <% if (message) { %>
+        <div class="alert alert-success alert-dismissable">
+            <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
+            <strong>Success!</strong>
+            <%= message %>
+        </div>
+        <% } %>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>description</th>
+                        <th>Category</th>
+                        <th>Image</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach(item=> { %>
+                        <tr>
+                            <td>
+                                <%= item.title %>
+                            </td>
+                            <td>
+                                <%= item.price %>
+                            </td>
+                            <td>
+                                <%= item.quantity %>
+                            </td>
+                            <td>
+                                <%= item.des %>
+                            </td>
+                            <td>
+                                <%= item.category %>
+                            </td>
+                            <td>
+                                <img src="<%= item.image %>" alt="image" width="100px" class="img-thumbnail">
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-success">update</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+</div>

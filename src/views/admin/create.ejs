@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>thêm sản phẩm mới</h1>
+        </div>
+        <div class="card-body">
+            <form action="/admin/create" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">tên sản phẩm:</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%= data ? data.title : '' %>"
+                        required>
+                    <span class="text-danger">
+                        <%= errors ? errors.title : '' %>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="price">giá:</label>
+                    <input type="text" class="form-control" id="price" name="price" value="<%= data ? data.price : '' %>"
+                        required>
+                    <span class="text-danger">
+                        <%= errors ? errors.price : '' %>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Số Lượng:</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity"
+                        value="<%= data ? data.quantity : '' %>" required>
+                    <span class="text-danger">
+                        <%= errors ? errors.quantity : '' %>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="des">mô tả sản phẩm:</label>
+                    <textarea class="form-control" id="des" name="des" required><%= data ? data.des : '' %></textarea>
+                    <span class="text-danger">
+                        <%= errors ? errors.des : '' %>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="">image</label>
+                    <input type="file" name="image" class="form-control" value="<%=data? data.image: '' %>">
+                    <span class="text-danger">
+                        <%= errors?errors.image:''%>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="category">Phân loại:</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="tivi" <%= data && data.category === 'tivi' ? 'selected' : '' %>>Tivi</option>
+                        <option value="tulanh" <%= data && data.category === 'tulanh' ? 'selected' : '' %>>Tủ lạnh</option>
+                        <option value="maygiat" <%= data && data.category === 'maygiat' ? 'selected' : '' %>>Máy giặt</option>
+                        <option value="robothutbui" <%= data && data.category === 'robothutbui' ? 'selected' : '' %>>Robot hút bụi</option>
+                    </select>
+                    <span class="text-danger">
+                        <%= errors ? errors.category : '' %>
+                    </span>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">thêm</button>
+            </form>
+        </div>
+    </div>
+</div>

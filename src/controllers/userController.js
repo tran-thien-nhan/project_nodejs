@@ -1,5 +1,6 @@
 const fs = require('fs');
 const User = require('../models/User');
+const Product = require('../models/Product');
 
 const viewUserIndex = (req, res) => {
     res.render('user/index', { title: 'Trang người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
@@ -11,6 +12,11 @@ const signupForm = (req, res) => {
 
 const loginForm = (req, res) => {
     res.render('user/login', { title: 'Trang đăng nhập người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
+}
+
+const getAllProduct = async (req, res) => {
+    const products = await Product.find({});
+    res.render('user/listProduct', { title: 'Trang danh sách sản phẩm', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, products });
 }
 
 const checkLogin = async (req, res, next) => {
@@ -101,12 +107,11 @@ const updateUser = async (req, res) => {
     }
 }
 
-
 const logout = (req, res) => {
     req.session.destroy();
     res.redirect('/user/login');
 }
 
 module.exports = {
-    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser
+    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct
 }
