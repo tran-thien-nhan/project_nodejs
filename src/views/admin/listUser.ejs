@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <% if (user) { %>
+            <h5 class="text-success">Welcome: <%= user.name %>
+            </h5>
+            <% } %>
+                <h1>User list</h1>
+                <% if (message) { %>
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Success!</strong>
+                        <%= message %>
+                    </div>
+                    <% } %>
+                        <div class="d-flex">
+                            <a href="/user/logout" class="btn btn-primary">log out</a>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Age</th>
+                                    <th>Role</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(item=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= item.id %>
+                                        </td>
+                                        <td>
+                                            <%= item.name %>
+                                        </td>
+                                        <td>
+                                            <%= item.email %>
+                                        </td>
+                                        <td>
+                                            <%= item.age %>
+                                        </td>
+                                        <td>
+                                            <%= item.role %>
+                                        </td>
+                                        <td>
+                                            <a href="/user/update/<%= item.id%>" class="btn btn-success">update</a>
+                                            <a href="/user/delete/<%= item.id%>" class="btn btn-warning">delete</a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+    </div>
+</body>
+
+</html>
