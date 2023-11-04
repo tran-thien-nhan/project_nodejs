@@ -46,6 +46,23 @@
     .overlay:hover+img {
         transform: scale(1.1);
     }
+
+    .buy-button {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .buy-button:hover {
+        background-color: #0056b3;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -54,11 +71,11 @@
                 <div class="card mb-4 product-card">
                     <div class="card-header">
                         <div class="product-image">
-                            <a href="/user">
+                            <a href="/user/pdetail/<%=item.id%>">
                                 <img src="<%= item.image %>" alt="image" class="img-fluid">
                             </a>
-                            <div class="overlay" onclick="location.href='/user';">
-                                <a href="#" class="btn btn-success view-button">Xem</a>
+                            <div class="overlay" onclick="location.href='/user/pdetail/<%=item.id%>';">
+                                <a href="/user/pdetail/<%=item.id%>" class="btn btn-success view-button">Xem</a>
                             </div>
                         </div>
                     </div>
@@ -66,6 +83,7 @@
                         <h5 style="text-align: center; margin-bottom: 0;">
                             <%= item.title %>
                         </h5>
+                        <a href="#" class="mt-2 buy-button">Mua ngay</a>
                     </div>
                 </div>
             </div>

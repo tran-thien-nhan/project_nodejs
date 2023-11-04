@@ -1,0 +1,143 @@
+<style>
+    .product-card {
+        display: flex;
+        border: 1px solid #e0e0e0;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
+        position: relative; /* Thêm thuộc tính này */
+    }
+
+    .product-image {
+        flex: 1;
+        max-height: 15rem;
+        object-fit: cover;
+    }
+
+    .product-details {
+        flex: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .product-description {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .product-quantity {
+        font-size: 1rem;
+    }
+
+    .buy-button {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .buy-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Mã CSS cho hiệu ứng mờ và nút "Xem hình" */
+    .product-card:hover .product-image-overlay {
+        /* background-color: rgba(0, 0, 0, 0.5); */
+        opacity: 1;
+    }
+
+    .product-image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .view-image-button {
+        color: #fff;
+        background-color: black;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="product-card">
+                <img src="<%= product.image %>" class="product-image" alt="Image of <%= product.title %>">
+                <!-- Hiệu ứng mờ và nút "Xem hình" -->
+                <div class="product-image-overlay">
+                    <div class="view-image-button" data-bs-toggle="modal" data-bs-target="#imageModal">
+                        Xem hình
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h5 class="product-title">
+                        <%= product.title %>
+                    </h5>
+                    <p class="product-price"><strong>Giá gốc:</strong>
+                        <%= (product.price * 1.1).toFixed(2) %> $
+                    </p>
+                    <p>giảm giá: <span style="color: red; font-weight: bold;">10%</span></p>
+                    <h5><strong>thành tiền <span style="color: red; font-weight: bold; font-size: larger;">
+                                <%= product.price %> $
+                            </span></strong></h5>
+                    <a href="#" class="buy-button">Mua ngay</a>
+                </div>
+            </div>
+            <div class="product-card">
+                <p class="product-description">
+                    <%= product.des %>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal để hiển thị hình ảnh -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hình ảnh sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="<%= product.image %>" class="img-fluid" alt="Image of <%= product.title %>">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Kích hoạt modal khi nút "Xem hình" được nhấn
+    document.querySelector('.view-image-button').addEventListener('click', function () {
+        $('#imageModal').modal('show');
+    });
+</script>

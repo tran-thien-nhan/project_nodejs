@@ -1,5 +1,5 @@
 const express = require('express');
-const { viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct } = require('../controllers/userController');
+const { viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail } = require('../controllers/userController');
 
 const upload = require('../controllers/middleware/uploadFile');
 const userRouter = express.Router();
@@ -12,7 +12,7 @@ userRouter.use((req, res, next) => {
   next();
 });
 
-userRouter.get('/', viewUserIndex);
+userRouter.get('/', getAllProduct);
 userRouter.get('/signup', signupForm);
 userRouter.post('/signup', signup);
 userRouter.get('/login', loginForm);
@@ -22,5 +22,5 @@ userRouter.get('/detail', getDetailUser);
 userRouter.get('/update/:id', getFormUpdateUser);
 userRouter.post('/update/:id', updateUser);
 userRouter.get('/plist', getAllProduct);
-
+userRouter.get('/pdetail/:id', getProductDetail);
 module.exports = userRouter;

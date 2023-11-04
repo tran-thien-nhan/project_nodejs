@@ -107,11 +107,35 @@ const updateUser = async (req, res) => {
     }
 }
 
+const getProductDetail = async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (product) {
+        const title = product.title; // Lấy tiêu đề sản phẩm
+        res.render('user/productDetail', {
+            title: title, // Sử dụng tiêu đề sản phẩm làm tiêu đề của trang
+            layout: 'layouts/userLayout',
+            product: product, 
+            errors: null,
+            user: req.session.user
+        });
+    } else {
+        res.render('user/index', {
+            title: '',
+            layout: 'layouts/userLayout',
+            data: null,
+            errors: { message: 'Sản phẩm không tồn tại' },
+            user: req.session.user,
+            products: []
+        });
+    }
+}
+
 const logout = (req, res) => {
     req.session.destroy();
     res.redirect('/user/login');
 }
 
 module.exports = {
-    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct
+    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail
 }
