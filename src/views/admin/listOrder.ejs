@@ -13,6 +13,7 @@
                         <th>Title</th>
                         <th>Price</th>
                         <th>Number</th>
+                        <th>total</th>
                         <th>Name</th>
                         <th>Address</th>
                     </tr>
@@ -27,10 +28,13 @@
                                 <%= item.title %>
                             </td>
                             <td>
-                                <%= item.price %>
+                                <%= item.price %>$
                             </td>
                             <td>
                                 <%= item.number %>
+                            </td>
+                            <td>
+                                <%= item.price * item.number %>$
                             </td>
                             <td>
                                 <%= item.name %>
