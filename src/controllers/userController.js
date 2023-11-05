@@ -222,7 +222,7 @@ const buyButton = async (req, res) => {
         // Xóa tất cả đơn hàng của người dùng dựa trên tên người dùng (hoặc ID người dùng)
         await Order.deleteMany({ name: user.name }); // Sử dụng tên người dùng để lọc đơn hàng
 
-        req.session.message = 'buy successfully';
+        req.session.message = 'order successfully';
         res.redirect('/user/order'); // Sau khi xóa, chuyển hướng đến trang đơn hàng
     } catch (error) {
         console.error(error);
