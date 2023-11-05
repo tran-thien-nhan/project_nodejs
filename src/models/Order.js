@@ -1,5 +1,13 @@
 const { Schema, default: mongoose } = require('mongoose');
 const orderSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, 'name is required']
+    },
+    address: {
+        type: String,
+        required: [true, 'address is required']
+    },
     title: {
         type: String,
         required: [true, 'Title is required']

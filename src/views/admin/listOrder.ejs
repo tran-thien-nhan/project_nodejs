@@ -9,17 +9,20 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Title</th>
                         <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Category</th>
-                        <th>Image</th>
-                        <th>action</th>
+                        <th>Number</th>
+                        <th>Name</th>
+                        <th>Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% products.forEach(item=> { %>
+                    <% orders.forEach(item=> { %>
                         <tr>
+                            <td>
+                                <img src="<%= item.image %>" alt="image" width="100px" class="img-thumbnail">
+                            </td>
                             <td>
                                 <%= item.title %>
                             </td>
@@ -27,16 +30,13 @@
                                 <%= item.price %>
                             </td>
                             <td>
-                                <%= item.quantity %>
+                                <%= item.number %>
                             </td>
                             <td>
-                                <%= item.category %>
+                                <%= item.name %>
                             </td>
                             <td>
-                                <img src="<%= item.image %>" alt="image" width="100px" class="img-thumbnail">
-                            </td>
-                            <td>
-                                <a href="" class="btn btn-success">update</a>
+                                <%= item.address %>
                             </td>
                         </tr>
                         <% }); %>

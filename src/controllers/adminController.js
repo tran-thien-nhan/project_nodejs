@@ -2,6 +2,7 @@ const fs = require('fs');
 // const Admin = require('../models/Admin');
 const Product = require('../models/Product');
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 const viewAdminIndex = (req, res) => {
     res.render('admin/index', { title: 'Trang quản trị', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user });
@@ -106,6 +107,11 @@ const createProduct = async (req, res) => {
         })
 }
 
+const getAllOrder = async (req, res) => {
+    const orders = await Order.find({});
+    res.render('admin/listOrder', { title: 'Trang danh sách đơn hàng', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user, orders });
+}
+
 module.exports = {
-    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser, getFormCreateProduct, createProduct, getAllProduct
+    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser, getFormCreateProduct, createProduct, getAllProduct, getAllOrder
 }

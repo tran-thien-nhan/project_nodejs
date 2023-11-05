@@ -15,9 +15,26 @@ const loginForm = (req, res) => {
     res.render('user/login', { title: 'Trang đăng nhập người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
 }
 
+// const getAllProduct = async (req, res) => {
+//     const products = await Product.find({});
+//     res.render('user/listProduct', { title: 'Trang danh sách sản phẩm', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, products });
+// }
+
 const getAllProduct = async (req, res) => {
-    const products = await Product.find({});
-    res.render('user/listProduct', { title: 'Trang danh sách sản phẩm', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, products });
+    try {
+        const products = await Product.find({});
+        res.render('user/listProduct', {
+            title: 'Trang danh sách sản phẩm',
+            layout: 'layouts/userLayout',
+            data: null,
+            errors: null,
+            user: req.session.user,
+            products,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 const checkLogin = async (req, res, next) => {
@@ -118,7 +135,7 @@ const getProductDetail = async (req, res) => {
             layout: 'layouts/userLayout',
             product: product,
             errors: null,
-            user: req.session.user
+            user: req.session.user // Truyền biến 'user' sang template
         });
     } else {
         res.render('user/index', {
@@ -133,24 +150,40 @@ const getProductDetail = async (req, res) => {
 }
 
 const viewOrder = async (req, res) => {
-    const orders = await Order.find({});
-    res.render('user/order', { title: 'Trang giỏ hàng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, orders });
+    const user = req.session.user; // Lấy thông tin người dùng từ session
+    if (!user) {
+        return res.redirect('/user/login'); // Đảm bảo người dùng đã đăng nhập
+    }
+
+    try {
+        const orders = await Order.find({ name: user.name }); // Lọc đơn hàng của người dùng hiện tại bằng cách so sánh theo trường 'name'
+        res.render('user/order', { title: 'Trang giỏ hàng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 const createOrder = async (req, res) => {
-    const { title, price, number, image } = req.body;
+    const { name, address, title, price, number, image } = req.body;
+    const user = req.session.user;
     const dataSubmit = {
+        name: name,
+        address: address,
         title: title,
         price: price,
         number: number,
         image: image
+    }
+    if (!user) {
+        return res.redirect('/user/login'); // Đảm bảo người dùng đã đăng nhập
     }
 
     try {
         const order = await Order.create(dataSubmit);
         req.session.message = "add to cart successfully";
 
-        const orders = await Order.find({});
+        const orders = await Order.find({ name: user.name }); // Lọc đơn hàng của người dùng hiện tại bằng cách so sánh theo trường 'name'
         res.render('user/order', { title: 'Trang giỏ hàng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, orders });
     } catch (err) {
         let errors = {};
@@ -179,7 +212,41 @@ const deleteOrder = async (req, res) => {
     }
 };
 
+const buyButton = async (req, res) => {
+    const user = req.session.user; // Lấy thông tin người dùng từ session
+    if (!user) {
+        return res.redirect('/user/login'); // Đảm bảo người dùng đã đăng nhập
+    }
 
+    try {
+        // Xóa tất cả đơn hàng của người dùng dựa trên tên người dùng (hoặc ID người dùng)
+        await Order.deleteMany({ name: user.name }); // Sử dụng tên người dùng để lọc đơn hàng
+
+        req.session.message = 'buy successfully';
+        res.redirect('/user/order'); // Sau khi xóa, chuyển hướng đến trang đơn hàng
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+const productByCategory = async (req, res) => {
+    const { category } = req.params;
+    try {
+        const products = await Product.find({ category });
+        res.render('user/listProduct', {
+            title: 'Sản phẩm theo danh mục',
+            layout: 'layouts/userLayout',
+            data: null,
+            errors: null,
+            user: req.session.user,
+            products,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
 
 const logout = (req, res) => {
     req.session.destroy();
@@ -187,5 +254,5 @@ const logout = (req, res) => {
 }
 
 module.exports = {
-    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail, createOrder, viewOrder, deleteOrder
+    viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail, createOrder, viewOrder, deleteOrder, buyButton, productByCategory
 }

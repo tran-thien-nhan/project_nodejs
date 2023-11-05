@@ -120,15 +120,16 @@
                                     <span class="quantity-label">Số lượng:</span>
                                     <input type="number" class="quantity-input" name="number" value="1" min="1">
                                 </div>
+                                <% if (user) { %>
+                                    <input type="hidden" name="name" value="<%= user.name %>">
+                                    <input type="hidden" name="address" value="<%= user.address %>">
+                                <% } %>
                                 <input type="hidden" name="title" value="<%= product.title %>">
                                 <input type="hidden" name="price" value="<%= product.price %>">
                                 <input type="hidden" name="image" value="<%= product.image %>">
                                 <button type="submit" class="buy-button" data-product-id="<%= product._id %>">Mua
                                     ngay</button>
                             </form>
-
-                            <a href="" class="buy-button mt-2" style="background-color: rgb(69, 169, 69);">thêm vào giỏ
-                                hàng</a>
                         </div>
                     </div>
                     <div class="product-card">

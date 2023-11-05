@@ -1,5 +1,5 @@
 const express = require('express');
-const { viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail, createOrder, viewOrder, deleteOrder} = require('../controllers/userController');
+const { viewUserIndex, signupForm, loginForm, signup, checkLogin, logout, getDetailUser, getFormUpdateUser, updateUser, getAllProduct, getProductDetail, createOrder, viewOrder, deleteOrder, buyButton, productByCategory} = require('../controllers/userController');
 
 const upload = require('../controllers/middleware/uploadFile');
 const userRouter = express.Router();
@@ -26,5 +26,7 @@ userRouter.get('/pdetail/:id', getProductDetail);
 userRouter.get('/order', viewOrder);
 userRouter.post('/order', createOrder);
 userRouter.get('/delete/:id', deleteOrder);
+userRouter.get('/buy', buyButton);
+userRouter.get('/category/:category', productByCategory);
 
 module.exports = userRouter;
