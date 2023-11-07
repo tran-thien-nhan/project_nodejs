@@ -134,39 +134,47 @@ const getFormUpdateProduct = async (req, res) => {
 }
 
 const updateProduct = async (req, res) => {
-    let { id, title, price, des, category, quantity, current_image } = req.body;
-    let imageUrl;
+    const { id, title, price, des, category, quantity, current_image } = req.body;
+    let imageUrl = current_image; // Mặc định là current_image
+
     if (req.file) {
         imageUrl = `/upload/${req.file.filename}`;
-    } else {
-        imageUrl = current_image;
     }
-    const dataSubmit = {
-        id: id,
-        title: title,
-        price: price,
-        des: des,
-        category: category,
-        quantity: quantity,
-        image: imageUrl
-    }
-    const opts = { runValidators: true };
-    await Product.updateOne({}, dataSubmit, opts)
-        .then(result => {
-            req.session.message = "Product updated successfully";
-            console.log(result);
-            res.redirect("/admin/plist");
-        })
-        .catch(err => {
-            let errors = {};
-            if (err.name === 'ValidationError') {
-                for (const field in err.errors) {
-                    errors[field] = err.errors[field].message;
-                }
-                res.render('admin/productUpdate', { errors, data: dataSubmit });
+
+    try {
+        const product = await Product.findOneAndUpdate(
+            { _id: id }, // Tìm sản phẩm dựa trên _id
+            {
+                title,
+                price,
+                des,
+                category,
+                quantity,
+                image: imageUrl
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        req.session.message = "Product updated successfully";
+        console.log(product);
+        res.redirect("/admin/plist");
+    } catch (err) {
+        if (err.name === 'ValidationError') {
+            const errors = {};
+            for (const field in err.errors) {
+                errors[field] = err.errors[field].message;
             }
-        })
+            return res.render('admin/productUpdate', { errors, data: req.body });
+        }
+
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
+
 
 const getAllOrder = async (req, res) => {
     const orders = await Order.find({});

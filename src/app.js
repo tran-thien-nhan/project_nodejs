@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const rootRouter = require('./router/rootRouter');
+const emailRouter = require('./router/mail.router');
 const { default: mongoose } = require('mongoose');
 const app = express();
 
@@ -21,7 +22,8 @@ app.set('layout', 'layouts/layout');
 app.use(session({
     secret: 'abc123', //ma de doc session tu client
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
 }))
 
 //xu ly middleware
@@ -33,6 +35,7 @@ app.use((req, res, next) => {
     next();
 })
 
+app.use(emailRouter);
 app.use(rootRouter);
 
 const PORT = 3000;

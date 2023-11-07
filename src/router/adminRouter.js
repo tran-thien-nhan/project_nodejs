@@ -12,7 +12,7 @@ adminRouter.use((req, res, next) => {
     next();
 });
 
-adminRouter.get('/', getAllOrder);
+adminRouter.get('/', getAllProduct);
 adminRouter.get('/ulist', getAllUsers);
 adminRouter.get('/update/:id', getFormUpdateProduct);
 adminRouter.post('/update/:id', upload.single('image'), updateProduct);

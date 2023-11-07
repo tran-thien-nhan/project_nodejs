@@ -2,6 +2,9 @@ const fs = require('fs');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const {
+    sendMailNodejs
+} = require('../controllers/mailController');
 
 const viewUserIndex = (req, res) => {
     res.render('user/index', { title: 'Trang người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
@@ -14,11 +17,6 @@ const signupForm = (req, res) => {
 const loginForm = (req, res) => {
     res.render('user/login', { title: 'Trang đăng nhập người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
 }
-
-// const getAllProduct = async (req, res) => {
-//     const products = await Product.find({});
-//     res.render('user/listProduct', { title: 'Trang danh sách sản phẩm', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user, products });
-// }
 
 const getAllProduct = async (req, res) => {
     try {
@@ -213,22 +211,31 @@ const deleteOrder = async (req, res) => {
 };
 
 const buyButton = async (req, res) => {
-    const user = req.session.user; // Lấy thông tin người dùng từ session
+    const user = req.session.user; // Get user information from the session
     if (!user) {
-        return res.redirect('/user/login'); // Đảm bảo người dùng đã đăng nhập
+        return res.redirect('/user/login'); // Ensure the user is logged in
     }
 
     try {
-        // Xóa tất cả đơn hàng của người dùng dựa trên tên người dùng (hoặc ID người dùng)
-        await Order.deleteMany({ name: user.name }); // Sử dụng tên người dùng để lọc đơn hàng
+        // Delete all orders of the user based on the username (or user ID)
+        await Order.deleteMany({ name: user.name }); // Use the username to filter orders
 
-        req.session.message = 'order successfully';
-        res.redirect('/user/order'); // Sau khi xóa, chuyển hướng đến trang đơn hàng
+        // Send an email (call the sendMailNodejs function)
+        const emailData = {
+            to: user.email,
+            subject: 'Order Confirmation',
+            text: 'Your order has been processed successfully.',
+        };
+        await sendMailNodejs(emailData);
+
+        req.session.message = 'Order successfully';
+        res.redirect('/user/order'); // After deleting, redirect to the order page
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 }
+
 
 const productByCategory = async (req, res) => {
     const { category } = req.params;
