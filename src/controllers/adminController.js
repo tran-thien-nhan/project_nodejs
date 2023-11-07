@@ -30,6 +30,8 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+
+
 const getFormUpdateRoleUser = async (req, res) => {
     const { id } = req.params;
     await User.findById(id)
@@ -107,11 +109,70 @@ const createProduct = async (req, res) => {
         })
 }
 
+const getFormUpdateProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const product = await Product.findById(id);
+        console.log(product);
+        res.render('admin/productUpdate', {
+            title: 'Trang update sản phẩm',
+            layout: 'layouts/adminLayout',
+            errors: null,
+            data: product,
+            user: req.session.user
+        });
+    } catch (err) {
+        console.error(err);
+        res.render('admin', {
+            title: 'Trang quản trị',
+            layout: 'layouts/adminLayout',
+            data: null,
+            errors: null,
+            user: req.session.user
+        });
+    }
+}
+
+const updateProduct = async (req, res) => {
+    let { id, title, price, des, category, quantity, current_image } = req.body;
+    let imageUrl;
+    if (req.file) {
+        imageUrl = `/upload/${req.file.filename}`;
+    } else {
+        imageUrl = current_image;
+    }
+    const dataSubmit = {
+        id: id,
+        title: title,
+        price: price,
+        des: des,
+        category: category,
+        quantity: quantity,
+        image: imageUrl
+    }
+    const opts = { runValidators: true };
+    await Product.updateOne({}, dataSubmit, opts)
+        .then(result => {
+            req.session.message = "Product updated successfully";
+            console.log(result);
+            res.redirect("/admin/plist");
+        })
+        .catch(err => {
+            let errors = {};
+            if (err.name === 'ValidationError') {
+                for (const field in err.errors) {
+                    errors[field] = err.errors[field].message;
+                }
+                res.render('admin/productUpdate', { errors, data: dataSubmit });
+            }
+        })
+}
+
 const getAllOrder = async (req, res) => {
     const orders = await Order.find({});
     res.render('admin/listOrder', { title: 'Trang danh sách đơn hàng', layout: 'layouts/adminLayout', data: null, errors: null, user: req.session.user, orders });
 }
 
 module.exports = {
-    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser, getFormCreateProduct, createProduct, getAllProduct, getAllOrder
+    viewAdminIndex, signupForm, getAllUsers, getFormUpdateRoleUser, updateRoleUser, getFormCreateProduct, createProduct, getAllProduct, getAllOrder, getFormUpdateProduct, updateProduct
 }
