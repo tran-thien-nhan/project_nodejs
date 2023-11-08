@@ -1,10 +1,10 @@
+var nodemailer = require('nodemailer');
 const fs = require('fs');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
-const {
-    sendMailNodejs
-} = require('../controllers/mailController');
+const templateMail = require('../template');
+// const { sendMailNodejs } = require('../controllers/mailController');
 
 const viewUserIndex = (req, res) => {
     res.render('user/index', { title: 'Trang người dùng', layout: 'layouts/userLayout', data: null, errors: null, user: req.session.user });
@@ -48,9 +48,17 @@ const checkLogin = async (req, res, next) => {
             return res.redirect('/user'); // Redirect to the user page
         }
     } else {
-        return res.render('login', { error: 'fail', data: { email, password } });
+        return res.render('user/login', {
+            title: 'Trang đăng nhập người dùng',
+            layout: 'layouts/userLayout',
+            error: 'fail',
+            errorMessage: 'Sai email hoặc mật khẩu', // Thêm thông báo lỗi
+            data: { email, password },
+            user: user  // Truyền biến user vào view
+        });
     }
 };
+
 
 const signup = async (req, res) => {
     const data = req.body;
@@ -211,28 +219,68 @@ const deleteOrder = async (req, res) => {
 };
 
 const buyButton = async (req, res) => {
-    const user = req.session.user; // Get user information from the session
+    const user = req.session.user; // Lấy thông tin người dùng từ session
     if (!user) {
-        return res.redirect('/user/login'); // Ensure the user is logged in
+        return res.redirect('/user/login'); // Đảm bảo người dùng đã đăng nhập
     }
 
     try {
-        // Delete all orders of the user based on the username (or user ID)
-        await Order.deleteMany({ name: user.name }); // Use the username to filter orders
+        // Xóa tất cả đơn hàng của người dùng dựa trên tên (hoặc ID người dùng)
+        await Order.deleteMany({ name: user.name }); // Sử dụng tên người dùng để lọc đơn hàng
 
-        // Send an email (call the sendMailNodejs function)
-        const emailData = {
-            to: user.email,
-            subject: 'Order Confirmation',
-            text: 'Your order has been processed successfully.',
+        // Tạo nội dung email sử dụng templateMail
+        const subject = "Cảm ơn bạn đã đặt hàng";
+        const content = "Chúc bạn một ngày tốt lành";
+        const emailContent = templateMail(subject, content);
+
+        // Tạo một Promise để gửi email
+        const sendEmail = () => {
+            return new Promise((resolve, reject) => {
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'nhanttts2210004@fpt.edu.vn',
+                        pass: 'jzpz tsdq dqbf finv',
+                    },
+                });
+
+                var mailOptions = {
+                    from: 'nhanttts2210004@fpt.edu.vn',
+                    to: user.email,
+                    subject: subject,
+                    html: emailContent // Sử dụng nội dung email từ template
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(info);
+                    }
+                });
+            });
         };
-        await sendMailNodejs(emailData);
 
-        req.session.message = 'Order successfully';
-        res.redirect('/user/order'); // After deleting, redirect to the order page
+        // Gửi email và xử lý kết quả
+        sendEmail()
+            .then((info) => {
+                req.session.message = {
+                    type: 'success',
+                    message: 'mua hàng thành công'
+                };
+                res.redirect('/user/order');
+            })
+            .catch((error) => {
+                req.session.message = {
+                    type: 'error',
+                    message: 'Đã xảy ra lỗi, vui lòng kiểm tra cài đặt email của bạn'
+                };
+                res.redirect('/user/order');
+            });
+
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('Lỗi máy chủ nội bộ');
     }
 }
 

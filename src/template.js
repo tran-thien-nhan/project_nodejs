@@ -14,7 +14,7 @@ const templateMail = (subject, content) => {
         <h1 style="padding-top: 20px;">${subject}</h1>
         <img src="https://www.thesprucepets.com/thmb/uQnGtOt9VQiML2oG2YzAmPErrHo=/5441x0/filters:no_upscale():strip_icc()/all-about-tabby-cats-552489-hero-a23a9118af8c477b914a0a1570d4f787.jpg"
             style="max-width: 80%;" alt="">
-        <p style="color:chocolate">${text}</p>
+        <p style="color:chocolate">${content}</p>
     </div>
 </body>
 
