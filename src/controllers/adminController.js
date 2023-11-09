@@ -133,6 +133,16 @@ const getFormUpdateProduct = async (req, res) => {
     }
 }
 
+const getform = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const product = await Product.findById(id);
+        res.render('admin/productUpdate');
+    } catch (err) {
+        res.render('admin');
+    }
+}
+
 const updateProduct = async (req, res) => {
     const { id, title, price, des, category, quantity, current_image } = req.body;
     let imageUrl = current_image; // Mặc định là current_image
